@@ -1,6 +1,16 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
+/**
+ * https://github.com/gradle/gradle/issues/22797
+ * Can update to Gradle 8 (and remove the suppress) and kotlin-android to 1.8.0 but Compose needs
+ * 1.7.20 for now.
+ */
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.com.android.application)
+    alias(libs.plugins.hilt.android)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    kotlin("kapt")
 }
 
 android {
@@ -49,21 +59,41 @@ android {
     }
 }
 
-dependencies {
+kapt {
+    correctErrorTypes = true
+}
 
-    implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
+dependencies {
+    constraints {
+        implementation(libs.org.jetbrains.kotlin.stdlib.jdk7) {
+            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+        }
+        implementation(libs.org.jetbrains.kotlin.stdlib.jdk8) {
+            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+        }
+    }
+
     implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
+    implementation(libs.core.ktx)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.material3)
+    implementation(libs.retrofit)
+
+    implementation(libs.retrofit.moshi)
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
+    implementation(platform(libs.compose.bom))
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
+    androidTestImplementation(platform(libs.compose.bom))
+
     debugImplementation(libs.ui.test.manifest)
+    debugImplementation(libs.ui.tooling)
 }
