@@ -10,7 +10,5 @@ import retrofit2.http.Query
 interface PokeApi {
 
     @GET("pokemon")
-    suspend fun getAll(@Query("limit") limit: Int): Any
-
-
+    suspend fun getAll(@Query("limit") limit: Int): PokemonResponse
 }

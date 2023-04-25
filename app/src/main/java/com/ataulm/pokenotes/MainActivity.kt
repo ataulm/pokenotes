@@ -60,8 +60,8 @@ class PokeNotesViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val all = pokeApi.getAll(150)
-            Log.d("!!!", all.toString())
+            val pokemonResponse = pokeApi.getAll(150)
+            Log.d("!!!", pokemonResponse.results.toString())
         }
     }
 }
