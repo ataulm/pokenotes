@@ -14,12 +14,14 @@ data class PokemonEntity(
     @Json(name = "url") val url: String
 ) {
     /**
+     * "Guessing" the GitHub asset URL means we can avoid doing another API call (per Pokémon) to
+     * fetch the artwork.
      * To get the actual artwork URL, we'll need to do another API call, but we can "guess" it from
      * the url returned.
      */
-    fun artworkUrl(): String? {
+    fun derivedArtworkUrl(): String? {
         return PATTERN_POKEMON_ID.find(url)?.groupValues?.lastOrNull()?.let { id ->
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png"
+            "$DERIVED_ARTWORK_URL/${id}.png"
         }
     }
 
@@ -27,6 +29,8 @@ data class PokemonEntity(
         /**
          * Looking for the x in "https://pokeapi.co/api/v2/pokemon/x/"
          */
-        private val PATTERN_POKEMON_ID =Regex("""/(\d+)/?$""")
+        private val PATTERN_POKEMON_ID = Regex("""/(\d+)/?$""")
+        private const val DERIVED_ARTWORK_URL =
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork"
     }
 }

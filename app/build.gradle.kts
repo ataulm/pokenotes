@@ -1,17 +1,11 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
-/**
- * https://github.com/gradle/gradle/issues/22797
- * Can update to Gradle 8 (and remove the suppress) and kotlin-android to 1.8.0 but Compose needs
- * 1.7.20 for now.
- */
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     kotlin("kapt")
 }
+
+private  val projectJvmTarget = JavaVersion.VERSION_1_8
 
 android {
     namespace = "com.ataulm.pokenotes"
@@ -40,17 +34,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = projectJvmTarget
+        targetCompatibility = projectJvmTarget
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = projectJvmTarget.toString()
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = libs.versions.compose.kotlin.compiler.extension.get()
     }
     packaging {
         resources {
@@ -59,20 +53,17 @@ android {
     }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = projectJvmTarget.toString()
+    }
+}
+
 kapt {
     correctErrorTypes = true
 }
 
 dependencies {
-    constraints {
-        implementation(libs.org.jetbrains.kotlin.stdlib.jdk7) {
-            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
-        }
-        implementation(libs.org.jetbrains.kotlin.stdlib.jdk8) {
-            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
-        }
-    }
-
     implementation(libs.activity.compose)
     implementation(libs.core.ktx)
     implementation(libs.hilt.android)

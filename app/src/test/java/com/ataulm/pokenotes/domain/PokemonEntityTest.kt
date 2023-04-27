@@ -11,7 +11,7 @@ class PokemonEntityTest {
             PokemonEntity(name = "Bulbasaur", url = "https://pokeapi.co/api/v2/pokemon/1/")
 
         assertThat(
-            bulbasaur.artworkUrl(),
+            bulbasaur.derivedArtworkUrl(),
             isEqualTo("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png")
         )
     }
