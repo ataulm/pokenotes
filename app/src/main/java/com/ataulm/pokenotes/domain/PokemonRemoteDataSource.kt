@@ -1,25 +1,25 @@
 package com.ataulm.pokenotes.domain
 
-import com.squareup.moshi.Json
+import com.ataulm.pokenotes.network.PokeApi
+import javax.inject.Inject
 
-data class PokemonResponse(
-    @Json(name = "count") val count: Int,
-    @Json(name = "next") val next: String?,
-    @Json(name = "previous") val previous: String?,
-    @Json(name = "results") val results: List<PokemonEntity>,
-)
-
-data class PokemonEntity(
-    @Json(name = "name") val name: String,
-    @Json(name = "url") val url: String
+class PokemonRemoteDataSource @Inject constructor(
+    private val pokeApi: PokeApi
 ) {
+
+    suspend fun getPokemon(): List<Pokemon> {
+        return pokeApi.getAll().results.map {
+            Pokemon(name = it.name, artworkUrl = derivedArtworkUrl(it.url))
+        }
+    }
+
     /**
      * "Guessing" the GitHub asset URL means we can avoid doing another API call (per Pokémon) to
      * fetch the artwork.
      * To get the actual artwork URL, we'll need to do another API call, but we can "guess" it from
      * the url returned.
      */
-    fun derivedArtworkUrl(): String? {
+    private fun derivedArtworkUrl(url: String): String? {
         return PATTERN_POKEMON_ID.find(url)?.groupValues?.lastOrNull()?.let { id ->
             "$DERIVED_ARTWORK_URL/${id}.png"
         }
@@ -34,3 +34,4 @@ data class PokemonEntity(
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork"
     }
 }
+

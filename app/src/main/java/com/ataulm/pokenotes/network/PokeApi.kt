@@ -1,7 +1,6 @@
-package com.ataulm.pokenotes.domain
+package com.ataulm.pokenotes.network
 
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val COOL_POKEMON_COUNT = 151

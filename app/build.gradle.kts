@@ -64,21 +64,24 @@ kapt {
 }
 
 dependencies {
+    kapt(libs.hilt.compiler)
+
     implementation(libs.activity.compose)
     implementation(libs.core.ktx)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    kapt(libs.hilt.compiler)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.material3)
     implementation(libs.retrofit)
-
     implementation(libs.retrofit.moshi)
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(platform(libs.compose.bom))
+
+    testImplementation(libs.assertj.core)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

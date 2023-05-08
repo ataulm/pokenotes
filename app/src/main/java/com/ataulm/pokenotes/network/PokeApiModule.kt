@@ -1,6 +1,5 @@
-package com.ataulm.pokenotes
+package com.ataulm.pokenotes.network
 
-import com.ataulm.pokenotes.domain.PokeApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
