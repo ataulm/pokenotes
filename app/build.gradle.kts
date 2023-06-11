@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     kotlin("kapt")
 }
@@ -65,6 +66,7 @@ kapt {
 
 dependencies {
     kapt(libs.hilt.compiler)
+    ksp(libs.room.compiler)
 
     implementation(libs.activity.compose)
     implementation(libs.core.ktx)
@@ -74,6 +76,8 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
